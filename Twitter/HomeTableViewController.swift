@@ -16,14 +16,27 @@ class HomeTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadTweet()
+       
+        
+      
+        // gotta change some table view shit
+// you got to add some stuff about row height
+        //11:41 in 2nd vid
+        //what is twweet tbale
 
     }
+    /*
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(Bool)
+        self.loadTweetTable
+    }
+ */
+    // try making it refresh automatically
     
     func loadTweet(){
         let myUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
         let myParams = ["count": 10]
-
-
+        //change this ??
 
         TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParams, success: { (tweets: [NSDictionary]) in
             self.tweetArray.removeAll()
@@ -31,8 +44,10 @@ class HomeTableViewController: UITableViewController {
                 self.tweetArray.append(tweet)
             }
             self.tableView.reloadData()
+            print(self.tweetArray)
         }, failure: { (Error) in
             print("Could not retrieve tweet! oh no !")
+            print(Error.localizedDescription)
         })
         
         
@@ -60,6 +75,12 @@ class HomeTableViewController: UITableViewController {
         if let imageData = data {
             cell.profileImageView.image = UIImage(data: imageData)
         }
+        
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool)
+        // i added this is favorited shit
+        cell.tweetId = tweetArray[indexPath.row]["id"] as! Int
+        cell.setRetweeted(tweetArray[indexPath.row]["retweeted"] as! Bool)
+        
         return cell
     }
     
@@ -72,6 +93,7 @@ class HomeTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tweetArray.count
     }
+ 
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
